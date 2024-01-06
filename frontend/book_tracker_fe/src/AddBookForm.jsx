@@ -6,8 +6,8 @@ const AddBookForm = () => {
   const [author, setAuthor] = useState("");
   const [genre, setGenre] = useState("");
   const [read, setRead] = useState(false);
-  const [pageNumber, setPageNumber] = useState("");
-  const [minutesRead, setMinutesRead] = useState("");
+  // const [pageNumber, setPageNumber] = useState("");
+  // const [minutesRead, setMinutesRead] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,12 +18,12 @@ const AddBookForm = () => {
       },
       body: JSON.stringify({
         title: title,
-        description: description || 'null',
-        author: author || 'null',
-        genre: genre || 'null',
+        description: description || '',
+        author: author || '',
+        genre: genre || '',
         read: read,
-        page_number: pageNumber || 'null',
-        minutes_read: minutesRead || 'null',
+        // page_number: pageNumber || 'null',
+        // minutes_read: minutesRead || 'null',
       }),
     })
     .then(response => response.json())
@@ -40,8 +40,8 @@ const AddBookForm = () => {
     setAuthor("");
     setGenre("");
     setRead(false);
-    setPageNumber("");
-    setMinutesRead("");
+    // setPageNumber("");
+    // setMinutesRead("");
   }
 
   return (
@@ -66,14 +66,14 @@ const AddBookForm = () => {
         Read:
         <input type="checkbox" checked={read} onChange={e => setRead(e.target.checked)} />
       </label>
-      <label>
+      {/* <label>
         Page Number:
         <input type="number" value={pageNumber} onChange={e => setPageNumber(e.target.value)} />
       </label>
       <label>
         Minutes Read:
         <input type="number" value={minutesRead} onChange={e => setMinutesRead(e.target.value)} />
-      </label>
+      </label> */}
       <input type="submit" value="Submit" />
     </form>
   )

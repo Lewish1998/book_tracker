@@ -1,12 +1,16 @@
 /* eslint-disable react/prop-types */
-import { FaTrash } from 'react-icons/fa';
 import './BookDetail.css'
+import { FaTrash, FaEdit } from 'react-icons/fa';
 
 const BookDetail = ({ book, deleteBook }) => {
 
-    const handleClick = () => {
+    const handleDelete = () => {
         deleteBook(book.id)
         console.log(book.id)
+    }
+
+    const handleUpdate = () => {
+        // Add your logic for handling the update here
     }
 
     return (
@@ -14,10 +18,10 @@ const BookDetail = ({ book, deleteBook }) => {
             <p>Title: {book.title}</p>
             <p>Author: {book.author}</p>
             <p>Genre: {book.genre}</p>
-            <p>Year: {book.year}</p>
             <p>Read: {book.read}</p>
             <p>Rating: {book.rating}</p>
-            <button onClick={handleClick}><FaTrash /></button>
+            <button onClick={handleDelete}><FaTrash /></button>
+            <button onClick={handleUpdate}><FaEdit />n/a</button>
         </div>
     )
 }

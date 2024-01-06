@@ -16,21 +16,21 @@ class Book(db.Model):
     author = db.Column(db.String(120), nullable=True)
     genre = db.Column(db.String(120), nullable=True)
     read = db.Column(db.Boolean, default=False)
-    page_number = db.Column(db.Integer, nullable=True)
-    minutes_read = db.Column(db.Integer, nullable=True)
+    # page_number = db.Column(db.Integer, nullable=True)
+    # minutes_read = db.Column(db.Integer, nullable=True)
 
-    def __init__(self, title, description, author, genre, read, page_number, minutes_read):
+    def __init__(self, title, description, author, genre, read, ): # page_number, minutes_read):
         self.title = title
         self.description = description
         self.author = author
         self.genre = genre
         self.read = read
-        self.page_number = page_number
-        self.minutes_read = minutes_read
+        # self.page_number = page_number
+        # self.minutes_read = minutes_read
 
 class BookSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'title', 'description', 'author', 'genre', 'read', 'page_number', 'minutes_read')
+        fields = ('id', 'title', 'description', 'author', 'genre', 'read',) #'page_number', 'minutes_read')
 
 book_schema = BookSchema()
 books_schema = BookSchema(many=True)
@@ -42,9 +42,9 @@ def add_book():
     author = request.json['author']
     genre = request.json['genre']
     read = request.json['read']
-    page_number = request.json['page_number']
-    minutes_read = request.json['minutes_read']
-    new_book = Book(title, description, author, genre, read, page_number, minutes_read)
+    # page_number = request.json['page_number']
+    # minutes_read = request.json['minutes_read']
+    new_book = Book(title, description, author, genre, read, )#page_number, minutes_read)
     db.session.add(new_book)
     db.session.commit()
     return book_schema.jsonify(new_book)
@@ -68,15 +68,15 @@ def update_book(id):
     author = request.json['author']
     genre = request.json['genre']
     read = request.json['read']
-    page_number = request.json['page_number']
-    minutes_read = request.json['minutes_read']
+    # page_number = request.json['page_number']
+    # minutes_read = request.json['minutes_read']
     book.title = title
     book.description = description
     book.author = author
     book.genre = genre
     book.read = read
-    book.page_number = page_number
-    book.minutes_read = minutes_read
+    # book.page_number = page_number
+    # book.minutes_read = minutes_read
     db.session.commit()
     return book_schema.jsonify(book)
 
