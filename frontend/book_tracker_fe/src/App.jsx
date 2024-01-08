@@ -10,8 +10,8 @@ export default function App() {
     <>
     <Router>
         <Routes>
-            {/* <Route path="/books" element={withAuth(<MainContainer />)} /> */} 
-            <Route path="/books" element={<MainContainer />} />
+            <Route path="/books" element={withAuth(MainContainer)} /> 
+            {/* <Route path="/books" element={<MainContainer />} /> */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
         </Routes>

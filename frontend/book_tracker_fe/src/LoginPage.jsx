@@ -33,6 +33,8 @@ const LoginPage = () => {
   };
 
   return (
+    <>
+    <h1>Login</h1>
     <form onSubmit={handleSubmit}>
       <label>
         Username:
@@ -44,6 +46,7 @@ const LoginPage = () => {
       </label>
       <input type="submit" value="Log in" />
     </form>
+    </>
   );
 };
 
