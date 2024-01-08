@@ -2,12 +2,73 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost:5432/books'
+app.config['JWT_SECRET_KEY'] = 'dev'  # Replace with your secret key
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+jwt = JWTManager(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(40), unique=True, nullable=False)
+    password = db.Column(db.String(40), nullable=False)
+
+    def __init__(self, username, password):
+        self.username = username
+        # self.password = generate_password_hash(password)#.decode('utf8')[:25] # Hash the password for security. Restricted to 25 characters for the testing
+        self.password = password # MAKE SURE TO HASH THE PASSWORD BEFORE DEPLOYMENT
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+
+    username = data.get('username')
+    password = data.get('password')
+
+    user = User.query.filter_by(username=username).first()
+    if user and password:
+        token = create_access_token(identity=username)
+        return jsonify(token=token), 200
+
+    # if user and check_password_hash(user.password, password):
+    #     token = create_access_token(identity=username)
+    #     return jsonify(token=token), 200
+    # MAKE SURE TO ADD BACK BEFORE DEPLOYMENT
+
+    return jsonify(message='Invalid username or password'), 401
+
+# Protect a route with jwt_required, which requires a valid token in the request to access
+@app.route('/protected', methods=['GET'])
+@jwt_required()
+def protected():
+    # Access the identity of the current user with get_jwt_identity
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
+
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+
+    username = data.get('username')
+    password = data.get('password')
+
+    # Check if the username already exists
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user:
+        return jsonify(message='Username already exists'), 400
+
+    new_user = User(username, password)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify(message='User created'), 201
+
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
